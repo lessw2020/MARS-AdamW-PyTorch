@@ -112,6 +112,12 @@ class MarsAdamW(Optimizer):
 
                 step = state_steps[i]
 
+                # Weight decay (check if this needs to be before update)
+                if group["weight_decay"] > 0:
+                    param.data.add_(
+                        param.data, alpha=-group["lr"] * group["weight_decay"]
+                    )
+
                 # Bias correction
                 bias_correction1 = 1 - beta1**step
                 bias_correction2 = 1 - beta2**step
